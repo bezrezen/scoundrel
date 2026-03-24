@@ -1,0 +1,19 @@
+generate deck
+generate room w 4 cards
+take players turn 3 times:
+    if turn == monster:
+        check for avaible weapon:
+            if weapon is not None:
+                health -= monster dmg - weapon
+            else:
+                health -= monster dmg
+    elif turn == weapon:
+        weapon = weapon value
+    elif turn == potion:
+        health += potion value
+        if health > 20:
+            health = 20
+    elif turn == skip:
+        flush old room
+        generate new room
+    check if player won or lost

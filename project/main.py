@@ -5,10 +5,10 @@ class Player:
         self.health = 20
         self.turn_count = 11
         self.weapon = 0
-        self.last_killed_w_weapon = None
+        self.last_killed_w_weapon = 0
         self.avoided_prev_room = False
         self.potions_taken_this_turn = False
-        self.end_game_status = 0
+        self.end_game_status = False
         self.deck_of_cards = []
         self.monsters = [
         "monster 14",
@@ -42,81 +42,87 @@ class Player:
         self.potions = ["potion 10", "potion 9", "potion 8", "potion 7", "potion 6", "potion 5", "potion 4", "potion 3", "potion 2"]
         self.room = []
 
-    def pick_card(self, card, room):
-        if card == "skip":
-            if self.avoided_prev_room == False:
-                self.avoided_prev_room = True
+    def pick_card(self):
+        
+        card = input("pick a card: ")
+
+        avaible_answers = ["1", "2", "3", "4", "skip"]
+        if card in avaible_answers:
+            if card == "skip":
+                if self.avoided_prev_room == False:
+                    self.avoided_prev_room = True
+                    self.room = []
+                    self.make_a_room()
+                else:
+                    print("you cannot skip")
             else:
-                print("you cannot skip")
-            return 0
+                picked = self.room[int(card) - 1]
+                card_type = picked.split()[0]
+                card_value = int(picked.split()[-1])
+                
+                print(f"you picked: {picked}")
+                if card_type == "monster":
+                    self.kill_monster(card_value)
+                elif card_type == "weapon":
+                    self.take_weapon(card_value)
+                elif card_type == "potion":
+                    self.take_potion(card_value)
+                self.room.remove(picked)
+            return self.room
         else:
-            picked = room[int(card)]
-            print(picked)
-            if picked.split()[0] == "monster":
-                self.kill_monster(picked)
-            elif picked.split()[0] == "weapon":
-                self.take_weapon(picked)
-            elif picked.split()[0] == "potion":
-                self.take_potion(picked)
-            room.remove(picked)       
+            self.pick_card(self.room)
+        
+    def take_weapon(self, card_value):
+        self.weapon = card_value
 
-    def take_weapon(self, card):
-        self.weapon = int(card.split()[-1])
+    def kill_monster(self, card_value):
+        if self.weapon != None and card_value <= self.last_killed_w_weapon:
+            dmg = card_value - self.weapon
+            self.last_killed_w_weapon = card_value
+            if dmg <= 0:
+                dmg = 0
+            self.health -= dmg
+        else:
+            dmg = card_value
+            self.health -= dmg
 
-    def kill_monster(self, card):
-        dmg = int(card.split()[-1]) - self.weapon
-        if dmg <= 0:
-            dmg = 0
-        self.health -= dmg
-
-    def take_potion(self, card):
-        self.health += int(card.split()[-1])
+    def take_potion(self, card_value):
+        self.health += card_value
         if self.health > 20:
             self.health = 20
-
-    def skip_room(self):
-        self.avoided_prev_room = True
    
+    def make_a_deck(self):
+        for item in self.weapons:
+            self.deck_of_cards.append(item)
+        for item in self.monsters:
+            self.deck_of_cards.append(item)
+        for item in self.potions:
+            self.deck_of_cards.append(item)
 
-    def make_a_deck(self, whole_deck, weapons, monsters, potions):
-        for item in weapons:
-            whole_deck.append(item)
-        for item in monsters:
-            whole_deck.append(item)
-        for item in potions:
-            whole_deck.append(item)
-        self.deck_of_cards = whole_deck
-        return whole_deck
-
-
-    def make_a_room(self, deck, room):
-        for i in range(4):
-            picked_card = random.choice(deck)
-            room.append(picked_card)
-            deck.remove(picked_card)
-        self.turn_count -= 1
-        return room
+    def make_a_room(self):
+        while len(self.room) < 4:
+            picked_card = random.choice(self.deck_of_cards)
+            self.room.append(picked_card)
+            self.deck_of_cards.remove(picked_card)
         
-    
-    def print_surrent_room(self, room):
+        return sorted(self.room)
+        
+    def print_current_room(self):
         if self.avoided_prev_room == False:
-            print(f"Room: {room} or skip?")
+            print(f"Room: {self.room} or skip?")
         else:
-            print(f"Room: {room} cannot skip this turn")
-        return room
+            print(f"Room: {self.room} cannot skip this turn")
+        return sorted(self.room)
 
-    
-    def clean_room(self):
-        self.room = []
-
-    def check_end(self, end_game_status):
+    def check_end(self):
         if self.turn_count <= 0:
-            self.end_game_status = 1
+            self.end_game_status = True
             print("win")
-        elif self.health <=0:
-            self.end_game_status = 1
+        elif self.health <= 0:
+            self.end_game_status = True
             print("lost")
-        return self.end_game_status
+        else:
+            self.print_statusbar()
 
     def print_statusbar(self):
         print(f"health: {self.health}, weapon: {self.weapon}, rooms left: {self.turn_count}")
@@ -124,20 +130,29 @@ class Player:
 
 def main():
     player = Player()
-    deck = player.make_a_deck(player.deck_of_cards, player.weapons, player.monsters, player.potions)
-    while player.end_game_status != 1:
-        room = player.make_a_room(deck, player.room)
-        for i in range(len(room)):
-            player.check_end(player.end_game_status)
-            player.print_surrent_room(room)
-            players_choice = input("take turn: ")
-            player.pick_card(players_choice, room)
+    player.make_a_deck()
+    while player.end_game_status == False:
+        player.make_a_room()
+        for i in range(len(player.room) - 1):
+            player.print_current_room()
+            player.pick_card()
+            player.check_end()
+            if player.end_game_status == True:
+                break
+            if player.avoided_prev_room == True:
+                player.avoided_prev_room = False
+                continue
             
-            player.clean_room()
-            player.print_statusbar()
-
-
+            
+        player.turn_count -= 1
+        
+        
 
 if __name__ == "__main__":
     main()
+
+
+# TODO:
+# fix weapon
+# fix turn count decreasing with multiple skips
 
