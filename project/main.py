@@ -1,4 +1,5 @@
 import random
+import os
 
 
 class Player:
@@ -163,6 +164,9 @@ class Player:
         )
         print(f"-" * 41)
 
+    def clear_console(self):
+        os.system("cls" if os.name == "nt" else "clear")
+
 
 def main():
     player = Player()
@@ -175,6 +179,7 @@ def main():
             player.print_current_room()
             player.pick_card()
             player.check_end()
+            # player.clear_console()
             if player.end_game_status == True:
                 break
             if player.avoided_prev_room == True:
