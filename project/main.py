@@ -5,7 +5,7 @@ class Player:
         self.health = 20
         self.turn_count = 11
         self.weapon = 0
-        self.last_killed_w_weapon = 0
+        self.last_killed_w_weapon = None
         self.avoided_prev_room = False
         self.potions_taken_this_turn = False
         self.end_game_status = False
@@ -59,7 +59,7 @@ class Player:
                 picked = self.room[int(card) - 1]
                 card_type = picked.split()[0]
                 card_value = int(picked.split()[-1])
-                
+                print(f"_"*25)
                 print(f"you picked: {picked}")
                 if card_type == "monster":
                     self.kill_monster(card_value)
@@ -70,10 +70,11 @@ class Player:
                 self.room.remove(picked)
             return self.room
         else:
-            self.pick_card(self.room)
+            self.pick_card()
         
     def take_weapon(self, card_value):
         self.weapon = card_value
+        self.last_killed_w_weapon = None
 
     def kill_monster(self, card_value):
         if self.weapon != None and card_value <= self.last_killed_w_weapon:
@@ -87,9 +88,13 @@ class Player:
             self.health -= dmg
 
     def take_potion(self, card_value):
-        self.health += card_value
-        if self.health > 20:
-            self.health = 20
+        if self.potions_taken_this_turn == False:
+            self.health += card_value
+            self.potions_taken_this_turn = True
+            if self.health > 20:
+                self.health = 20
+        else:
+            print("already took a potion this turn")
    
     def make_a_deck(self):
         for item in self.weapons:
@@ -108,10 +113,16 @@ class Player:
         return sorted(self.room)
         
     def print_current_room(self):
+        print(f"_"*15)
         if self.avoided_prev_room == False:
-            print(f"Room: {self.room} or skip?")
+            for i, item in enumerate(self.room):
+                print(f"{i+1}) {self.room[i]}")
+            print(f"\n{len(self.room) + 1}) skip")
         else:
-            print(f"Room: {self.room} cannot skip this turn")
+            for i, item in enumerate(self.room):
+                print(f"{i+1}) {self.room[i]}")
+            print(f"\ncannot skip this turn")
+        print(f"_"*15)
         return sorted(self.room)
 
     def check_end(self):
@@ -125,13 +136,17 @@ class Player:
             self.print_statusbar()
 
     def print_statusbar(self):
-        print(f"health: {self.health}, weapon: {self.weapon}, rooms left: {self.turn_count}")
+        print(f"_"*41)
+        print(f"| health: {self.health}, weapon: {self.weapon}, rooms left: {self.turn_count} |")
+        print(f"-"*41)
     
 
 def main():
     player = Player()
     player.make_a_deck()
     while player.end_game_status == False:
+        player.avoided_prev_room = False
+        player.potions_taken_this_turn = False
         player.make_a_room()
         for i in range(len(player.room) - 1):
             player.print_current_room()
@@ -140,7 +155,6 @@ def main():
             if player.end_game_status == True:
                 break
             if player.avoided_prev_room == True:
-                player.avoided_prev_room = False
                 continue
             
             
