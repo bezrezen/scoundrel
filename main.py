@@ -1,6 +1,5 @@
-from prettytable import PrettyTable
-from domain.domain import Player
-from ui.ui import ConsoleUI
+from src.project.domain.domain import Player
+from src.project.ui.ui import ConsoleUI
 
 
 
@@ -32,7 +31,7 @@ def main():
                 break
 
             if action == "debug":
-                player.debug()
+                player.switch_debug()
                 continue
 
             if action == "s":

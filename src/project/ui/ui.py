@@ -1,4 +1,4 @@
-from domain.domain import Player
+from src.project.domain.domain import Player
 import os
 from prettytable import PrettyTable
 
@@ -14,12 +14,13 @@ class ConsoleUI:
         p = self.player
 
         status_bar = PrettyTable()
-        status_bar.max_table_width = 80
-        status_bar.min_table_width = 80
+        
+        status_bar.max_width = 80
+        status_bar.min_width = 20
 
         current_room = PrettyTable()
-        current_room.max_table_width = 80
-        current_room.min_table_width = 80
+        current_room.max_width = 80
+        current_room.min_width = 20
 
         # комната
         for i, card in enumerate(p.room):
@@ -41,6 +42,8 @@ class ConsoleUI:
         status_bar.add_column("Weapon", [p.weapon])
         status_bar.add_column("Last killed", [0 if p.last_killed_w_weapon == 20 else p.last_killed_w_weapon])
         status_bar.add_column("Rooms passed", [p.rooms_passed])
+        if self.player.debug_mode:
+            status_bar.add_column("Debug", ["ON"])
 
         print(status_bar)
         print(current_room)

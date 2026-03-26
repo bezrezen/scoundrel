@@ -15,41 +15,41 @@ class Player:
 
         self.deck_of_cards = []
         self.monsters = [
-            ["monster", "♠ demigod", 14], ["monster", "♣ demigod", 14],
-            ["monster", "♠ dragon", 13],  ["monster", "♣ dragon", 13],
-            ["monster", "♠ wyrm", 12],    ["monster", "♣ wyrm", 12],
-            ["monster", "♠ giant", 11],   ["monster", "♣ giant", 11],
-            ["monster", "♠ troll", 10],   ["monster", "♣ troll", 10],
-            ["monster", "♠ shade", 9],    ["monster", "♣ shade", 9],
-            ["monster", "♠ bear", 8],     ["monster", "♣ bear", 8],
-            ["monster", "♠ orc", 7],      ["monster", "♣ orc", 7],
-            ["monster", "♠ hobgoblin", 6],["monster", "♣ hobgoblin", 6],
-            ["monster", "♠ goblin", 5],   ["monster", "♣ goblin", 5],
-            ["monster", "♠ kobold", 4],   ["monster", "♣ kobold", 4],
-            ["monster", "♠ snake", 3],    ["monster", "♣ snake", 3],
-            ["monster", "♠ rat", 2],      ["monster", "♣ rat", 2],
+            ["monster", "o(｀ω´ )o", 14], ["monster", "o(｀ω´ )o", 14],
+            ["monster", "o(｀ω´ )o", 13],  ["monster", "o(｀ω´ )o", 13],
+            ["monster", "o(｀ω´ )o", 12],    ["monster", "o(｀ω´ )o", 12],
+            ["monster", "o(｀ω´ )o", 11],   ["monster", "o(｀ω´ )o", 11],
+            ["monster", "o(｀ω´ )o", 10],   ["monster", "o(｀ω´ )o", 10],
+            ["monster", "o(｀ω´ )o", 9],    ["monster", "o(｀ω´ )o", 9],
+            ["monster", "o(｀ω´ )o", 8],     ["monster", "o(｀ω´ )o", 8],
+            ["monster", "o(｀ω´ )o", 7],      ["monster", "o(｀ω´ )o", 7],
+            ["monster", "o(｀ω´ )o", 6],["monster", "o(｀ω´ )o", 6],
+            ["monster", "o(｀ω´ )o", 5],   ["monster", "o(｀ω´ )o", 5],
+            ["monster", "o(｀ω´ )o", 4],   ["monster", "o(｀ω´ )o", 4],
+            ["monster", "o(｀ω´ )o", 3],    ["monster", "o(｀ω´ )o", 3],
+            ["monster", "o(｀ω´ )o", 2],      ["monster", "o(｀ω´ )o", 2],
         ]
         self.weapons = [
-            ["weapon", "♦ Divine sword", 10],
-            ["weapon", "♦ Halberd", 9],
-            ["weapon", "♦ Falscion", 8],
-            ["weapon", "♦ Broadsword", 7],
-            ["weapon", "♦ Spear", 6],
-            ["weapon", "♦ Axe", 5],
-            ["weapon", "♦ Dagger", 4],
-            ["weapon", "♦ Club", 3],
-            ["weapon", "♦ Fork", 2],
+            ["weapon", "+=={::::::::::::>", 10],
+            ["weapon", "+=={::::::::::::>", 9],
+            ["weapon", "+=={::::::::::::>", 8],
+            ["weapon", "+=={::::::::::::>", 7],
+            ["weapon", "+=={::::::::::::>", 6],
+            ["weapon", "+=={::::::::::::>", 5],
+            ["weapon", "+=={::::::::::::>", 4],
+            ["weapon", "+=={::::::::::::>", 3],
+            ["weapon", "+=={::::::::::::>", 2],
         ]
         self.potions = [
-            ["potion", "♥ Health potion", 10],
-            ["potion", "♥ Health potion", 9],
-            ["potion", "♥ Health potion", 8],
-            ["potion", "♥ Health potion", 7],
-            ["potion", "♥ Health potion", 6],
-            ["potion", "♥ Health potion", 5],
-            ["potion", "♥ Health potion", 4],
-            ["potion", "♥ Health potion", 3],
-            ["potion", "♥ Health potion", 2],
+            ["potion", "🧪", 10],
+            ["potion", "🧪", 9],
+            ["potion", "🧪", 8],
+            ["potion", "🧪", 7],
+            ["potion", "🧪", 6],
+            ["potion", "♥ Health potion 🧪", 5],
+            ["potion", "♥ Health potion 🧪", 4],
+            ["potion", "♥ Health potion 🧪", 3],
+            ["potion", "♥ Health potion 🧪", 2],
         ]
 
         self.room = []
@@ -120,12 +120,10 @@ class Player:
             else:
                 self.health = new_health
 
-    def debug(self):
-        if self.debug_mode == False:
+    def switch_debug(self):
+        if not self.debug_mode:
             self.health = 999
-            self.debug_mode = True
-        elif self.debug_mode == True:
-            self.debug_mode = False
+        self.debug_mode = not self.debug_mode
 
     def check_end(self):
         if len(self.deck_of_cards) <= 0:
