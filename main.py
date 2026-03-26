@@ -1,5 +1,5 @@
-from src.project.domain.domain import Player
-from src.project.ui.ui import ConsoleUI
+from src.domain.domain import Player
+from src.ui.ui import ConsoleUI
 
 
 

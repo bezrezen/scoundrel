@@ -1,4 +1,4 @@
-from src.project.domain.domain import Player
+from src.domain.domain import Player
 import os
 from prettytable import PrettyTable
 
