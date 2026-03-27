@@ -115,10 +115,7 @@ class Player:
         if not self.potions_taken_this_turn:
             new_health = self.health + value
             self.potions_taken_this_turn = True
-            if not self.debug_mode:
-                self.health = min(20, new_health)
-            else:
-                self.health = new_health
+            self.health = min(20, new_health) if not self.debug_mode else new_health
 
     def switch_debug(self):
         if not self.debug_mode:
