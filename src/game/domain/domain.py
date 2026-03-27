@@ -15,19 +15,19 @@ class Player:
 
         self.deck_of_cards = []
         self.monsters = [
-            ["monster", "o(｀ω´ )o", 14], ["monster", "o(｀ω´ )o", 14],
-            ["monster", "o(｀ω´ )o", 13],  ["monster", "o(｀ω´ )o", 13],
-            ["monster", "o(｀ω´ )o", 12],    ["monster", "o(｀ω´ )o", 12],
-            ["monster", "o(｀ω´ )o", 11],   ["monster", "o(｀ω´ )o", 11],
-            ["monster", "o(｀ω´ )o", 10],   ["monster", "o(｀ω´ )o", 10],
-            ["monster", "o(｀ω´ )o", 9],    ["monster", "o(｀ω´ )o", 9],
-            ["monster", "o(｀ω´ )o", 8],     ["monster", "o(｀ω´ )o", 8],
-            ["monster", "o(｀ω´ )o", 7],      ["monster", "o(｀ω´ )o", 7],
-            ["monster", "o(｀ω´ )o", 6],["monster", "o(｀ω´ )o", 6],
-            ["monster", "o(｀ω´ )o", 5],   ["monster", "o(｀ω´ )o", 5],
-            ["monster", "o(｀ω´ )o", 4],   ["monster", "o(｀ω´ )o", 4],
-            ["monster", "o(｀ω´ )o", 3],    ["monster", "o(｀ω´ )o", 3],
-            ["monster", "o(｀ω´ )o", 2],      ["monster", "o(｀ω´ )o", 2],
+            ["monster", "😈", 14], ["monster", "😈", 14],
+            ["monster", "😈", 13],  ["monster", "😈", 13],
+            ["monster", "😈", 12],    ["monster", "😈", 12],
+            ["monster", "😈", 11],   ["monster", "😈", 11],
+            ["monster", "😈", 10],   ["monster", "😈", 10],
+            ["monster", "😈", 9],    ["monster", "😈", 9],
+            ["monster", "😈", 8],     ["monster", "😈", 8],
+            ["monster", "😈", 7],      ["monster", "😈", 7],
+            ["monster", "😈", 6],["monster", "😈", 6],
+            ["monster", "😈", 5],   ["monster", "😈", 5],
+            ["monster", "😈", 4],   ["monster", "😈", 4],
+            ["monster", "😈", 3],    ["monster", "😈", 3],
+            ["monster", "😈", 2],      ["monster", "😈", 2],
         ]
         self.weapons = [
             ["weapon", "+=={::::::::::::>", 10],

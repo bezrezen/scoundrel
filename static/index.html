@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Scoundrel Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white p-8">
+    <h1 class="text-4xl mb-8">Scoundrel Game</h1>
+
+    <div id="status" class="bg-gray-800 p-6 rounded mb-8"></div>
+    <div id="room" class="grid grid-cols-4 gap-4"></div>
+
+    <div class="flex gap-4">
+        <button id="startTurn" class="bg-blue-600 px-6 py-3 rounded hover:bg-blue-700">New Room</button>
+        <button id="debugBtn" class="bg-purple-600 px-6 py-3 rounded hover:bg-purple-700">Debug</button>
+        <button id="skipBtn" class="bg-orange-600 px-6 py-3 rounded hover:bg-orange-700"
+            style="display:none">Skip</button>
+    </div>
+
+    <script>
+        let gameState = {};
+
+        async function updateUI() {
+            try {
+                const res = await fetch('/api/game/state');
+                gameState = await res.json();
+            } catch (e) { return; }
+
+            // статус
+            document.getElementById('status').innerHTML = `
+                Health: ${gameState.health} | 
+                Weapon: ${gameState.weapon} | 
+                Picks: ${gameState.pick_counter}/3 | 
+                Score: ${gameState.score}<br>
+                ${gameState.can_skip ? 'Can Skip' : 'Cannot Skip'}
+                ${gameState.debug_mode ? '<br>DEBUG ON' : ''}
+            `;
+
+            // комната
+            const roomDiv = document.getElementById('room');
+            roomDiv.innerHTML = gameState.room?.map((card, i) => `
+                <button onclick="pickCard(${i})" class="bg-gray-700 p-4 rounded hover:bg-gray-600 ${gameState.pick_counter <= 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${gameState.pick_counter <= 0 ? 'disabled' : ''}>
+                    <div>${card.name}</div>
+                    <div class="text-2xl font-bold">${card.value}</div>
+                    <div class="text-sm">${card.type}</div>
+                </button>
+            `).join('') || '<div class="col-span-4 text-center py-8">No room</div>';
+
+            document.getElementById('skipBtn').style.display = gameState.can_skip ? 'block' : 'none';
+        }
+
+        async function pickCard(i) {
+            if (gameState.pick_counter <= 0) return;
+            await fetch('/api/game/pick', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'card', index: i })
+            });
+            updateUI();
+        }
+
+        document.getElementById('startTurn').onclick = () => {
+            fetch('/api/game/start-turn', { method: 'POST' }).then(updateUI);
+        };
+        document.getElementById('debugBtn').onclick = () => {
+            fetch('/api/game/pick', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'debug' })
+            }).then(updateUI);
+        };
+        document.getElementById('skipBtn').onclick = () => {
+            fetch('/api/game/pick', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'skip' })
+            }).then(updateUI);
+        };
+
+        updateUI();
+        setInterval(updateUI, 1000);
+    </script>
+</body>
+
+</html>
